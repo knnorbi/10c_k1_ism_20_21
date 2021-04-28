@@ -9,14 +9,84 @@ namespace _10c_k1_ism_20_21
 {
     class Program
     {
+        static bool KisebbE(string ez, string ennel)
+        {
+            string ezIp = ez.Split(';')[1];
+            string ennelIp = ennel.Split(';')[1];
+
+            if (int.Parse(ezIp.Split('.')[0]) < int.Parse(ennelIp.Split('.')[0]))
+            {
+                return true;
+            }
+            else if (int.Parse(ezIp.Split('.')[0]) > int.Parse(ennelIp.Split('.')[0]))
+            {
+                return false;
+            }
+            else if (int.Parse(ezIp.Split('.')[1]) < int.Parse(ennelIp.Split('.')[1]))
+            {
+                return true;
+            }
+            else if (int.Parse(ezIp.Split('.')[1]) > int.Parse(ennelIp.Split('.')[1]))
+            {
+                return false;
+            }
+            else if (int.Parse(ezIp.Split('.')[2]) < int.Parse(ennelIp.Split('.')[2]))
+            {
+                return true;
+            }
+            else if (int.Parse(ezIp.Split('.')[2]) > int.Parse(ennelIp.Split('.')[2]))
+            {
+                return false;
+            }
+            else if (int.Parse(ezIp.Split('.')[3]) < int.Parse(ennelIp.Split('.')[3]))
+            {
+                return true;
+            }
+            else if (int.Parse(ezIp.Split('.')[3]) > int.Parse(ennelIp.Split('.')[3]))
+            {
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         static void Main(string[] args)
         {
-            // abszolut utvonal
-            //StreamReader sr = new StreamReader(@"C:\Users\Norbi\Desktop\csudh.txt");
-
-            // relativ utvonal
-            StreamReader sr = new StreamReader(@"..\..\csudh.txt");
             StreamWriter sw = new StreamWriter("csudh.html");
+
+            // Fajl beolvasas
+            string[] sorok = File.ReadAllLines(@"..\..\csudh.txt");
+            
+            // Elso elem torlese
+            string[] tmp = new string[sorok.Length - 1];
+            for (int i = 0; i < tmp.Length; i++)
+            {
+                tmp[i] = sorok[i + 1];
+            }
+            sorok = tmp;
+
+            // Rendezes
+            for (int i = 0; i < sorok.Length - 1; i++)
+            {
+                int legkisebb = i;
+                for (int j = i + 1; j < sorok.Length; j++)
+                {
+                    if (KisebbE(sorok[j],sorok[legkisebb]))
+                    {
+                        legkisebb = j;
+                    }
+                }
+
+                if(i != legkisebb)
+                {
+                    string tmpcsere = sorok[i];
+                    sorok[i] = sorok[legkisebb];
+                    sorok[legkisebb] = tmpcsere;
+                }
+
+            }
 
             sw.WriteLine("<!DOCTYPE html>");
             sw.WriteLine("<html>");
@@ -37,11 +107,11 @@ namespace _10c_k1_ism_20_21
             sw.WriteLine("</tr>");
 
             int sszor = 1;
-            string sor;
-            sr.ReadLine();
-            while ((sor = sr.ReadLine()) != null)
+
+
+            for (int k = 0; k < sorok.Length; k++)
             {
-                string[] adatok = sor.Split(';');
+                string[] adatok = sorok[k].Split(';');
                 string[] dns = adatok[0].Split('.');
 
                 sw.WriteLine("<tr>");
@@ -71,7 +141,7 @@ namespace _10c_k1_ism_20_21
 
 
             sw.Close();
-            sr.Close();
+            //sr.Close();
         }
     }
 }
